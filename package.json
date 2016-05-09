@@ -1,8 +1,8 @@
 {
-    "name": "node-component-boilerplate",
+    "name": "mithril-node-linechart",
     "version": "1.0.0",
     "description": "",
-    "main": "componentname.js",
+    "main": "linechart.js",
     "dependencies": {
         "mithril": "^0.2.0"
     },
@@ -11,14 +11,15 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/mithril-components/node-component-boilerplate.git"
+        "url": "git+https://github.com/mithril-components/mithril-node-linechart.git"
     },
     "keywords": [
         "mithril",
-        "nodejs"
+        "nodejs",
+        "line chart"
     ],
     "bugs": {
-        "url": "https://github.com/mithril-components/mithril-component-boilerplate/issues"
+        "url": "https://github.com/mithril-components/mithril-node-linechart/issues"
     },
-    "homepage": "https://github.com/mithril-components/mithril-component-boilerplate#readme"
+    "homepage": "https://github.com/mithril-components/mithril-node-linechart#readme"
 }
