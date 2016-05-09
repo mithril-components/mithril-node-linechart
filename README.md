@@ -13,17 +13,23 @@ Add `linechart` to your dependencies on `package.json` file then:
             {
                 "color": "#ff33ee",
                 "data": [
-                    "label": "Sample label",
-                    "value": 100,
-                    "tooltip": "More details"
+                    {
+                        "label": "Sample label",
+                        "value": 100,
+                        "tooltip": "More details"
+                    },
+                    ...
                 ]
             },
             {
                 "color": "#2233ee",
                 "data": [
-                    "label": "Some label",
-                    "value": 130,
-                    "tooltip": "More details"
+                    {
+                        "label": "Some label",
+                        "value": 130,
+                        "tooltip": "More details"
+                    },
+                    ...
                 ]
             },
             ...
