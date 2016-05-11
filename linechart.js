@@ -8,16 +8,7 @@ const m = require('mithril');
 /*
     Problems :
     1. Limited the number of line and the number of points
-    2. Normalize the Y scale :
-        [ 100, 150, 200, 300, 400 ]
-        [ 100, 200, 300, 3000, 4000 ]
-
-    Questions :
-    1. How could I 
-    Normalize the scale :
-    Utiliser des couleurs differentes pour les echelles
-    Un nombre de 4000 en axe Y peut aussi partager la meme valeur de l'echelle qu'un nombre 200, il faut juste utiliser deux couleurs differentes.
- */
+*/
 
 // Return a JSON containing all data to build the line chart.
 const controller = (data) => {
@@ -52,17 +43,11 @@ const controller = (data) => {
         }
     })
 
-    console.log("Biggest : ");
-    console.log(yBiggest);
-    console.log("Scale : ");
-    console.log(scales);
-    console.log("Grid : ");
-    console.log(xLength);
-
     return {
-        'grid':       xLength,
-        'biggest':    yBiggest,
-        'lines':      data.lines
+        'grid':         xLength,
+        'biggest':      yBiggest,
+        'scales':       scales,
+        'lines':        data.lines
 
     };
 }
@@ -96,6 +81,68 @@ const drawYGrids = (length) => {
     return render;
 }
 
+
+
+// TODO: Add the right color.
+const drawYLegends = (scale, length, i) => {
+    let render = [];
+
+    for (let index = (i >= 1 ? 1 : 0); index < length + 1; ++index) {
+        render.push(m('text', {
+            x: 0,
+            y: 85 - (index * 75 / (length + 1)) + i * 3
+        }, (scale / length * index)));
+    }
+
+    return render;
+}
+
+const drawXLegends = (lines, length) => {
+    const render = [];
+
+    for (let index = 0; index < length; ++index) {
+
+        const tmp = [];
+        
+        lines.forEach((line, lIndex) => {
+            if (line.data[index] != undefined) {
+                tmp.push({
+                    "label": line.data[index].label.length > 10 ? line.data[index].label.slice(0, 10) + '...' : line.data[index].label,
+                    "color": line.color
+                });
+            }
+        });
+
+        let temp = [];
+        label : for (let i = 0; i < tmp.length; ++i) {
+            for (let j = 0; j < temp.length; j++ ) {
+                if (temp[j].label == tmp[i].label)
+                    continue label;      
+            }
+            temp[temp.length] = tmp[i];
+        }
+        
+        temp.forEach((value, tIndex) => {
+            const x = (10 + (index * 85 / length) + tIndex * 3);
+            render.push(m('text', {
+                x: x,
+                y: 97,
+                fill: value.color,
+                style: `transform: rotate(-60deg); transform-origin: ${x}px 97px;`
+            }, value.label));
+        });
+    }
+
+    return render;
+}
+
+const chooseScale = (scales, nb) => {
+    for (let index = 0; scales.length > index; ++index) {
+        if (scales[index] - nb < 1000)
+            return scales[index];
+    }
+}
+
 // Return a SVG line chart.
 const view = (ctrl) => {
 
@@ -113,7 +160,7 @@ const view = (ctrl) => {
             opacity:            0.3,
             'stroke-width':     0.3,
             'stroke-dasharray': '1, 1'
-        }, drawXGrids(total)),
+        }, drawXGrids(total + 1)),
         
         // Draw grid Y.
         m('g', {
@@ -122,44 +169,28 @@ const view = (ctrl) => {
             'stroke-width':     0.3,
             'stroke-dasharray': '1, 1'
         }, drawYGrids(total)),
-        /*
-        // Draw grid X legends.
-        m('g', { style: 'font-size: ' + (85 - (85 - (75 / totalX))) + '%' }, [
-            ctrl.xGrid.map((x, index) => {
-            // If the text length is above 7 characters then slice it and add '...'.
-            const cutText = x.length > 7 ? x.slice(0, 7) + '...' : x;
-                return m('text', {
-                    x: 0,
-                    y: 85 - (index * 75 / totalX)
-                }, cutText);
+    
+        // Draw grid Y legends.
+        m('g', { style: 'font-size: ' + (85 - (85 - (75 / total))) + '%' }, [
+            ctrl.scales.map((scale, index) => {
+                return drawYLegends(scale, total, index);
             })
         ]),
-       
-        
 
-        // Draw Grid Y legends.
-        m('g', { style: 'font-size: ' + (85 - (85 - (75 / totalX))) + '%' }, [
-            ctrl.yGrid.map((y, index) => {
-                // If the text length is above 7 characters then slice it and add '...'.
-                const cutText = y.length > 7 ? y.slice(0, 7) + '...' : y;
-                const x = (10 + (index * 85 / totalY));
-                return m('text', {
-                    x: x,
-                    y: 97,
-                    style: `transform: rotate(-60deg); transform-origin: ${x}px <97></97>px;`
-                }, cutText);
-            })
+        // Draw Grid X legends.
+        m('g', { style: 'font-size: ' + (85 - (85 - (75 / total))) + '%' }, [
+            drawXLegends(ctrl.lines, total)
         ]),
-        */
-        /*
+
         // Draw lines points.
         m('g', [
-            ctrl.lines.map((line, index) => {
+            ctrl.lines.map((line, lIndex) => {
+                let scale = chooseScale(ctrl.scales, ctrl.biggest[lIndex]);
                 return m('g', [
-                    line.points.map((point, index) => {
+                    line.data.map((point, pIndex) => {
                         return m('circle', {
-                           cx:      10 + (point[0] * 75 / totalY),
-                           cy:      85 - (point[1] * 75 / totalX),
+                           cx:      10 + (pIndex * 75 / total),
+                           cy:      85 - ((point.value * total / scale) * 75 / (total + 1)),
                            r:       0.7,
                            fill:    line.color
                         });
@@ -167,16 +198,17 @@ const view = (ctrl) => {
                 ])
             })
         ]),
-        
+
         // Draw straight lines.
         m('g', {
             'stroke-width': 0.5,
             fill:           'none'
         }, [
-            ctrl.lines.map((line, index) => {
+            ctrl.lines.map((line, lIndex) => {
+                let scale = chooseScale(ctrl.scales, ctrl.biggest[lIndex]);
                 return m('polyline', {
-                    points: line.points.map((point, index) => {
-                        return 10 + (point[0] * 75 / totalY) + ',' + (85 - (point[1] * 75 / totalX));
+                    points: line.data.map((point, pIndex) => {
+                        return 10 + (pIndex * 75 / total) + ',' + (85 - ((point.value * total / scale) * 75 / (total + 1)));
                     }),
                     stroke: line.color,
                 });
@@ -191,21 +223,20 @@ const view = (ctrl) => {
                 return m('g', [
                     m('line', {
                         x1:             90,
-                        y1:             20 + (index * 25 / totalX),
+                        y1:             20 + (index * 25 / total),
                         x2:             92,
-                        y2:             20 + (index * 25 / totalX),
+                        y2:             20 + (index * 25 / total),
                         stroke:         line.color,
                         'stroke-width': 0.5
                     }),
                     m('text', {
                         x:      93,
-                        y:      20 + (index * 27 / totalX),
-                        style: 'font-size: ' + (85 - (85 - (75 / totalX))) + '%'
+                        y:      20 + (index * 27 / total),
+                        style: 'font-size: ' + (85 - (85 - (75 / total))) + '%'
                     }, cutText)
                 ])
             })
         ])
-        */
     ]);
 
 }

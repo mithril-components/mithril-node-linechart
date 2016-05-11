@@ -9,75 +9,78 @@ const linechart     = require('./linechart');
 const model = {
     "lines": [
         {
-            "color": "#ff33ee",
+            "title": "Line A",
+            "color": "#02B3E7",
             "data": [
                 {
-                    "label": "Sample label 0",
+                    "label": "label 0",
                     "value": 100,
                     "tooltip": "More details"
                 },
                 {
-                    "label": "Sample label 1",
+                    "label": "label 1",
                     "value": 100,
                     "tooltip": "More details"
                 },
                 {
-                    "label": "Sample label 2",
+                    "label": "label 2",
                     "value": 150,
                     "tooltip": "More details"
                 },
                 {
-                    "label": "Sample label 3",
+                    "label": "label 3",
                     "value": 300,
                     "tooltip": "More details"
                 }
             ]
         },
         {
-            "color": "#2233ee",
+            "title": "Line B",
+            "color": "#FFEC62",
             "data": [
                 {
-                    "label": "Sample label 0",
+                    "label": "label 0",
                     "value": 1000,
                     "tooltip": "More details"
                 },
                 {
-                    "label": "Sample label B",
+                    "label": "label B",
                     "value": 2000,
                     "tooltip": "More details"
                 },
                 {
-                    "label": "Sample label C",
+                    "label": "label C",
                     "value": 3000,
                     "tooltip": "More details"
                 },
                 {
-                    "label": "Sample label D",
+                    "label": "label D",
                     "value": 4000,
                     "tooltip": "More details"
                 },
                 {
-                    "label": "Sample label E",
+                    "label": "label E",
                     "value": 5000,
                     "tooltip": "More details"
                 }
             ]
         },
         {
-            "color": "#EE6B22",
+            "title": "Line C",
+            "color": "#EB0D42",
             "data": [
                 {
-                    "label": "Sample label 9",
+                    "label": "label 9",
                     "value": 50,
                     "tooltip": "More details"
                 },
                 {
-                    "label": "Sample label 8",
+                    "label": "label 8",
                     "value": 100,
                     "tooltip": "More details"
                 },
                 {
-                    "label": "Sample label 7",
+                    "label": "label 7",
                     "value": 200,
                     "tooltip": "More details"
                 }
