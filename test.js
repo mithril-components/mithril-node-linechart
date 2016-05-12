@@ -14,22 +14,27 @@ const model = {
             "data": [
                 {
                     "label": "label 0",
-                    "value": 100,
+                    "value": 1000,
                     "tooltip": "More details"
                 },
                 {
                     "label": "label 1",
-                    "value": 100,
+                    "value": 120,
                     "tooltip": "More details"
                 },
                 {
                     "label": "label 2",
-                    "value": 150,
+                    "value": 20050,
                     "tooltip": "More details"
                 },
                 {
                     "label": "label 3",
-                    "value": 300,
+                    "value": 30000,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 4",
+                    "value": 15000,
                     "tooltip": "More details"
                 }
             ]
@@ -71,28 +76,7 @@ const model = {
             "data": [
                 {
                     "label": "label 9",
-                    "value": 50,
-                    "tooltip": "More details"
-                },
-                {
-                    "label": "label 8",
-                    "value": 100,
-                    "tooltip": "More details"
-                },
-                {
-                    "label": "label 7",
-                    "value": 200,
-                    "tooltip": "More details"
-                }
-            ]
-        },
-        {
-            "title": "Line C",
-            "color": "#1A5EA3",
-            "data": [
-                {
-                    "label": "label 9",
-                    "value": 70,
+                    "value": 75,
                     "tooltip": "More details"
                 },
                 {
@@ -104,26 +88,67 @@ const model = {
                     "label": "label 7",
                     "value": 150,
                     "tooltip": "More details"
-                }
-            ]
-        },
-        {
-            "title": "Line C",
-            "color": "#BAA323",
-            "data": [
-                {
-                    "label": "label 9",
-                    "value": 55,
-                    "tooltip": "More details"
                 },
                 {
-                    "label": "label 8",
-                    "value": 100,
+                    "label": "label 7",
+                    "value": 150,
                     "tooltip": "More details"
                 },
                 {
                     "label": "label 7",
-                    "value": 300,
+                    "value": 200,
+                    "tooltip": "More details"
+                }
+            ]
+        },
+        {
+            "title": "Line D",
+            "color": "#1A5EA3",
+            "data": [
+                {
+                    "label": "label 9",
+                    "value": 20,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 8",
+                    "value": 10,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 7",
+                    "value": 50,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 7",
+                    "value": 0,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 7",
+                    "value": 35,
+                    "tooltip": "More details"
+                }
+            ]
+        },
+        {
+            "title": "Line E",
+            "color": "#31E02A",
+            "data": [
+                {
+                    "label": "label 9",
+                    "value": 0,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 8",
+                    "value": 8,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 7",
+                    "value": 3,
                     "tooltip": "More details"
                 }
             ]

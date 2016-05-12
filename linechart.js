@@ -21,13 +21,15 @@ const controller = (data) => {
     // Retrieve the biggest Y value of each line and store it in an array.
     lines.map((line, index) => {
         let copy = line.data.slice();
-        copy.sort();
+        copy.sort((a, b) => {
+            if (a.value > b.value)
+                return 1;
+            else if (a.value < b.value)
+                return -1;
+            return 0;
+        });
         scales[index] = copy.pop().value;
     });
-
-    // Create an array with the different scale to display.
-    let copy = scales.slice();
-    copy.sort().reverse();
 
     return {
         'grid':         total,
@@ -72,11 +74,13 @@ const drawYLegends = (scale, color, length, i) => {
     let render = [];
 
     for (let index = (i >= 1 ? 1 : 0); index < length + 1; ++index) {
+        let nb = scale / length * index;
+        nb = (Number(nb) === nb && nb % 1 === 0 ? nb : parseFloat(scale / length * index).toFixed(1));
         render.push(m('text', {
             x: 0,
             y: 85 - (index * 75 / (length + 1)) + i * 2,
             fill: color
-        }, (scale / length * index)));
+        }, nb));
     }
 
     return render;
@@ -151,7 +155,7 @@ const view = (ctrl) => {
         m('g', { style: 'font-size: ' + (0.5 / ctrl.lines.length) + 'em' }, [
             drawXLegends(ctrl.lines, total)
         ]),
-        
+
         // Draw lines points.
         m('g', [
             ctrl.lines.map((line, lIndex) => {
