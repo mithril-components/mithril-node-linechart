@@ -85,6 +85,48 @@ const model = {
                     "tooltip": "More details"
                 }
             ]
+        },
+        {
+            "title": "Line C",
+            "color": "#1A5EA3",
+            "data": [
+                {
+                    "label": "label 9",
+                    "value": 70,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 8",
+                    "value": 100,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 7",
+                    "value": 150,
+                    "tooltip": "More details"
+                }
+            ]
+        },
+        {
+            "title": "Line C",
+            "color": "#BAA323",
+            "data": [
+                {
+                    "label": "label 9",
+                    "value": 55,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 8",
+                    "value": 100,
+                    "tooltip": "More details"
+                },
+                {
+                    "label": "label 7",
+                    "value": 300,
+                    "tooltip": "More details"
+                }
+            ]
         }
     ]
 };

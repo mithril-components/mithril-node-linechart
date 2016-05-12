@@ -5,53 +5,39 @@
 const m = require('mithril');
 
 
-/*
-    Problems :
-    1. Limited the number of line and the number of points
-*/
 
 // Return a JSON containing all data to build the line chart.
 const controller = (data) => {
     const lines = data.lines;
     let scales = [];
-    let yBiggest = [];
-    let xLength = 0;
+    let total = 0;
 
     // Compute the x axis length.
     for (let i = 0; lines.length > i; ++i) {
-        if (lines[i].data.length > xLength)
-            xLength = lines[i].data.length;
+        if (lines[i].data.length > total)
+            total = lines[i].data.length;
     }
 
     // Retrieve the biggest Y value of each line and store it in an array.
     lines.map((line, index) => {
         let copy = line.data.slice();
         copy.sort();
-        yBiggest[index] = copy.pop().value;
+        scales[index] = copy.pop().value;
     });
 
     // Create an array with the different scale to display.
-    let copy = yBiggest.slice();
+    let copy = scales.slice();
     copy.sort().reverse();
 
-    let current = copy[0];
-    scales.push(current);
-    copy.map((big, index) => {
-        if (big < current && current - big > 1000) {
-            scales.push(big);
-            current = big;
-        }
-    })
-
     return {
-        'grid':         xLength,
-        'biggest':      yBiggest,
+        'grid':         total,
         'scales':       scales,
         'lines':        data.lines
 
     };
 }
 
+// Draw x grid.
 const drawXGrids = (length) => {
     let render = [];
 
@@ -66,7 +52,7 @@ const drawXGrids = (length) => {
     return render;
 }
 
-
+// Draw y grid.
 const drawYGrids = (length) => {
     let render = [];
 
@@ -81,22 +67,22 @@ const drawYGrids = (length) => {
     return render;
 }
 
-
-
-// TODO: Add the right color.
-const drawYLegends = (scale, length, i) => {
+// Draw legends for y axis.
+const drawYLegends = (scale, color, length, i) => {
     let render = [];
 
     for (let index = (i >= 1 ? 1 : 0); index < length + 1; ++index) {
         render.push(m('text', {
             x: 0,
-            y: 85 - (index * 75 / (length + 1)) + i * 3
+            y: 85 - (index * 75 / (length + 1)) + i * 2,
+            fill: color
         }, (scale / length * index)));
     }
 
     return render;
 }
 
+// Draw legends for x axis.
 const drawXLegends = (lines, length) => {
     const render = [];
 
@@ -112,18 +98,9 @@ const drawXLegends = (lines, length) => {
                 });
             }
         });
-
-        let temp = [];
-        label : for (let i = 0; i < tmp.length; ++i) {
-            for (let j = 0; j < temp.length; j++ ) {
-                if (temp[j].label == tmp[i].label)
-                    continue label;      
-            }
-            temp[temp.length] = tmp[i];
-        }
         
-        temp.forEach((value, tIndex) => {
-            const x = (10 + (index * 85 / length) + tIndex * 3);
+        tmp.forEach((value, tIndex) => {
+            const x = (5 + (index * 85 / length) + tIndex * 2);
             render.push(m('text', {
                 x: x,
                 y: 97,
@@ -134,13 +111,6 @@ const drawXLegends = (lines, length) => {
     }
 
     return render;
-}
-
-const chooseScale = (scales, nb) => {
-    for (let index = 0; scales.length > index; ++index) {
-        if (scales[index] - nb < 1000)
-            return scales[index];
-    }
 }
 
 // Return a SVG line chart.
@@ -171,21 +141,21 @@ const view = (ctrl) => {
         }, drawYGrids(total)),
     
         // Draw grid Y legends.
-        m('g', { style: 'font-size: ' + (85 - (85 - (75 / total))) + '%' }, [
+        m('g', { style: 'font-size: ' + (0.5 / ctrl.lines.length) + 'em' }, [
             ctrl.scales.map((scale, index) => {
-                return drawYLegends(scale, total, index);
+                return drawYLegends(scale, ctrl.lines[index].color, total, index);
             })
         ]),
 
         // Draw Grid X legends.
-        m('g', { style: 'font-size: ' + (85 - (85 - (75 / total))) + '%' }, [
+        m('g', { style: 'font-size: ' + (0.5 / ctrl.lines.length) + 'em' }, [
             drawXLegends(ctrl.lines, total)
         ]),
-
+        
         // Draw lines points.
         m('g', [
             ctrl.lines.map((line, lIndex) => {
-                let scale = chooseScale(ctrl.scales, ctrl.biggest[lIndex]);
+                let scale = ctrl.scales[lIndex];
                 return m('g', [
                     line.data.map((point, pIndex) => {
                         return m('circle', {
@@ -205,7 +175,7 @@ const view = (ctrl) => {
             fill:           'none'
         }, [
             ctrl.lines.map((line, lIndex) => {
-                let scale = chooseScale(ctrl.scales, ctrl.biggest[lIndex]);
+                let scale = ctrl.scales[lIndex];
                 return m('polyline', {
                     points: line.data.map((point, pIndex) => {
                         return 10 + (pIndex * 75 / total) + ',' + (85 - ((point.value * total / scale) * 75 / (total + 1)));
@@ -223,22 +193,21 @@ const view = (ctrl) => {
                 return m('g', [
                     m('line', {
                         x1:             90,
-                        y1:             20 + (index * 25 / total),
+                        y1:             20 + (index * 19 / total),
                         x2:             92,
-                        y2:             20 + (index * 25 / total),
+                        y2:             20 + (index * 19 / total),
                         stroke:         line.color,
                         'stroke-width': 0.5
                     }),
                     m('text', {
                         x:      93,
-                        y:      20 + (index * 27 / total),
+                        y:      20 + (index * 20 / total),
                         style: 'font-size: ' + (85 - (85 - (75 / total))) + '%'
                     }, cutText)
                 ])
             })
         ])
     ]);
-
 }
 
 module.exports = {
