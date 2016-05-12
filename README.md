@@ -1,7 +1,9 @@
-node-mithril-component-boilerplate
-==================================
+node-mithril-linechart
+======================
 
-TODO: Description
+A simple SVG line chart component for Mithril and NodeJS.
+
+![Line chart screenshot](screenshot.png)
 
 Usage
 =====
@@ -46,6 +48,9 @@ TODO: Options
 Test
 ====
 
-TODO: How to test
+Setup [mithril-component-tools](https://github.com/mithril-components/mitthril-components-tools) first. Then:
+
+    npm install
+    mct test pagination.js en
 
 

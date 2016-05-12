@@ -170,9 +170,4 @@ Hide or show grid
 Hide or show lines
 Hide or show point
 Line or Sinus
-
-
-
-
-
 */
