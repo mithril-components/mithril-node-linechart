@@ -43,7 +43,7 @@ const controller = (data) => {
 const drawXGrids = (length) => {
     let render = [];
 
-    for (let index = 0; index < length; ++index) {
+    for (let index = 0; index < length + 1; ++index) {
         render.push(m('line', {
             x1:                 10, //Grid X beginning.
             x2:                 85, // Grid X ending.
@@ -58,7 +58,7 @@ const drawXGrids = (length) => {
 const drawYGrids = (length) => {
     let render = [];
 
-    for (let index = 0; index < length; ++index) {
+    for (let index = 0; index < length + 1; ++index) {
         render.push(m('line', {
             x1:     10 + (index * 75 / length),
             x2:     10 + (index * 75 / length),
