@@ -44,11 +44,12 @@ const drawXGrids = (length) => {
     let render = [];
 
     for (let index = 0; index < length + 1; ++index) {
+
         render.push(m('line', {
             x1:                 10, //Grid X beginning.
             x2:                 85, // Grid X ending.
-            y1:                 85 - (index * 75 / length),
-            y2:                 85 - (index * 75 / length)
+            y1:                 45 - (index * 35 / length),
+            y2:                 45 - (index * 35 / length)
         }));
     }
     return render;
@@ -58,19 +59,24 @@ const drawXGrids = (length) => {
 const drawYGrids = (length) => {
     let render = [];
 
-    for (let index = 0; index < length + 1; ++index) {
+    for (let index = 0; index < length + 1 ; ++index) {
         render.push(m('line', {
             x1:     10 + (index * 75 / length),
             x2:     10 + (index * 75 / length),
             y1:     10,
-            y2:     85
+            y2:     45
         }));
     }
     return render;
 }
 
 // Draw legends for y axis.
-const drawYLegends = (scale, color, length, i) => {
+const drawYLegends = (lines, scale, color, length, i) => {
+
+    const ySize = 35 / (length + 1);
+    const elements = lines.length;
+    const legendSize = (ySize / elements > 2 ? 2 : ySize / elements);
+
     let render = [];
 
     for (let index = (i >= 1 ? 1 : 0); index < length + 1; ++index) {
@@ -78,8 +84,9 @@ const drawYLegends = (scale, color, length, i) => {
         nb = (Number(nb) === nb && nb % 1 === 0 ? nb : parseFloat(scale / length * index).toFixed(1));
         render.push(m('text', {
             x: 0,
-            y: 85 - (index * 75 / (length + 1)) + i * 2,
-            fill: color
+            y: index === 0 ? ((45 - index * ySize) + i * (legendSize * 9 / 10)) : ((45 - index * ySize) - ySize / 3 + i * (legendSize * 9 / 10)),
+            fill: color,
+            'font-size': legendSize * 9 / 10
         }, nb));
     }
 
@@ -88,6 +95,11 @@ const drawYLegends = (scale, color, length, i) => {
 
 // Draw legends for x axis.
 const drawXLegends = (lines, length) => {
+
+    const xSize = 10 + (75 / length);
+    const elements = lines.length;
+    const legendSize = (xSize / elements > 2 ? 2 : xSize / elements);
+
     const render = [];
 
     for (let index = 0; index < length; ++index) {
@@ -104,12 +116,13 @@ const drawXLegends = (lines, length) => {
         });
         
         tmp.forEach((value, tIndex) => {
-            const x = (5 + (index * 85 / length) + tIndex * 2);
+            const x = 5 + (index * 85 / length) + tIndex * legendSize;
             render.push(m('text', {
                 x: x,
-                y: 97,
+                y: 53,
                 fill: value.color,
-                style: `transform: rotate(-60deg); transform-origin: ${x}px 97px;`
+                'font-size': legendSize * 9 / 10,
+                style: `transform: rotate(-60deg); transform-origin: ${x}px 53px;`
             }, value.label));
         });
     }
@@ -123,7 +136,7 @@ const view = (ctrl) => {
     const total = ctrl.grid;
 
     return m('svg', {
-        viewBox:        '0 0 100 100',
+        viewBox:        '0 0 100 55',
         xmlns:          'http://www.w3.org/2000/svg',
         'xmlns:xlink':  'http://www.w3.org/1999/xlink'
     }, [        
@@ -143,16 +156,16 @@ const view = (ctrl) => {
             'stroke-width':     0.3,
             'stroke-dasharray': '1, 1'
         }, drawYGrids(total)),
-    
+
         // Draw grid Y legends.
-        m('g', { style: 'font-size: ' + (0.5 / ctrl.lines.length) + 'em' }, [
+        m('g', [
             ctrl.scales.map((scale, index) => {
-                return drawYLegends(scale, ctrl.lines[index].color, total, index);
+                return drawYLegends(ctrl.lines, scale, ctrl.lines[index].color, total, index);
             })
         ]),
 
         // Draw Grid X legends.
-        m('g', { style: 'font-size: ' + (0.5 / ctrl.lines.length) + 'em' }, [
+        m('g', [
             drawXLegends(ctrl.lines, total)
         ]),
 
@@ -164,7 +177,7 @@ const view = (ctrl) => {
                     line.data.map((point, pIndex) => {
                         return m('circle', {
                            cx:      10 + (pIndex * 75 / total),
-                           cy:      85 - ((point.value * total / scale) * 75 / (total + 1)),
+                           cy:      45 - ((point.value * total / scale) * 35 / (total + 1)),
                            r:       0.7,
                            fill:    line.color
                         });
@@ -182,7 +195,7 @@ const view = (ctrl) => {
                 let scale = ctrl.scales[lIndex];
                 return m('polyline', {
                     points: line.data.map((point, pIndex) => {
-                        return 10 + (pIndex * 75 / total) + ',' + (85 - ((point.value * total / scale) * 75 / (total + 1)));
+                        return 10 + (pIndex * 75 / total) + ',' + (45 - ((point.value * total / scale) * 35 / (total + 1)));
                     }),
                     stroke: line.color,
                 });
@@ -192,21 +205,24 @@ const view = (ctrl) => {
         // Draw lines legends.
         m('g', [
             ctrl.lines.map((line, index) => {
+                const fontSize = ((30 / ctrl.lines.length > 2) ? 2 : 30 / ctrl.lines.length);
                 // If the text length is above 7 characters then slice it and add '...'.
                 const cutText = line.title.length > 7 ? line.title.slice(0, 7) + '...' : line.title;
                 return m('g', [
                     m('line', {
                         x1:             90,
-                        y1:             20 + (index * 19 / total),
+                        y1:             12 + (index * fontSize),
                         x2:             92,
-                        y2:             20 + (index * 19 / total),
+                        y2:             12 + (index * fontSize),
                         stroke:         line.color,
                         'stroke-width': 0.5
                     }),
                     m('text', {
                         x:      93,
-                        y:      20 + (index * 20 / total),
-                        style: 'font-size: ' + (85 - (85 - (75 / total))) + '%'
+                        y:      12.5 + (index * fontSize),
+                        'font-size': fontSize * 9 / 10 + 'px'
+                        //style: 'font-size: ' + (85 - (85 - (75 / total))) + '%'
+                        // (30 / ctrl.lines.length > 2) ? 2 : 30 / ctrl.lines.length
                     }, cutText)
                 ])
             })
