@@ -13,6 +13,7 @@ Add `linechart` to your dependencies on `package.json` file then:
     const model = {
         "lines": [
             {
+                "title": "A",
                 "color": "#ff33ee",
                 "data": [
                     {
@@ -24,6 +25,7 @@ Add `linechart` to your dependencies on `package.json` file then:
                 ]
             },
             {
+                "title": "B",
                 "color": "#2233ee",
                 "data": [
                     {
@@ -43,7 +45,12 @@ Add `linechart` to your dependencies on `package.json` file then:
 Options
 =======
 
-TODO: Options
+* **lines**: Define the lines of the line chart.
+    * **title**: Define the title of the line.
+    * **color**: Define the color of the line.
+    * **data**: Define values to draw the line chart.
+        * **label**: X value of the point.
+        * **value**: Y value of the point.
 
 Test
 ====

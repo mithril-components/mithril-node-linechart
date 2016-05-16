@@ -139,7 +139,7 @@ const view = (ctrl) => {
         viewBox:        '0 0 100 55',
         xmlns:          'http://www.w3.org/2000/svg',
         'xmlns:xlink':  'http://www.w3.org/1999/xlink'
-    }, [        
+    }, [
 
         // Draw x grid.
         m('g', {
@@ -221,8 +221,6 @@ const view = (ctrl) => {
                         x:      93,
                         y:      12.5 + (index * fontSize),
                         'font-size': fontSize * 9 / 10 + 'px'
-                        //style: 'font-size: ' + (85 - (85 - (75 / total))) + '%'
-                        // (30 / ctrl.lines.length > 2) ? 2 : 30 / ctrl.lines.length
                     }, cutText)
                 ])
             })
