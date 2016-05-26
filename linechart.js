@@ -1,8 +1,8 @@
-#!/usr/bin/env node
-'use strict'
+// Defines that JS code should be executed in "strict mode".
+"use strict";
 
 // Load required modules
-const m = require('mithril');
+const m = require("mithril");
 
 
 
@@ -32,9 +32,9 @@ const controller = (data) => {
     });
 
     return {
-        'grid':         total,
-        'scales':       scales,
-        'lines':        data.lines
+        "grid":         total,
+        "scales":       scales,
+        "lines":        data.lines
 
     };
 }
@@ -45,7 +45,7 @@ const drawXGrids = (length) => {
 
     for (let index = 0; index < length + 1; ++index) {
 
-        render.push(m('line', {
+        render.push(m("line", {
             x1:                 10, //Grid X beginning.
             x2:                 85, // Grid X ending.
             y1:                 45 - (index * 35 / length),
@@ -60,7 +60,7 @@ const drawYGrids = (length) => {
     let render = [];
 
     for (let index = 0; index < length + 1 ; ++index) {
-        render.push(m('line', {
+        render.push(m("line", {
             x1:     10 + (index * 75 / length),
             x2:     10 + (index * 75 / length),
             y1:     10,
@@ -82,11 +82,11 @@ const drawYLegends = (lines, scale, color, length, i) => {
     for (let index = (i >= 1 ? 1 : 0); index < length + 1; ++index) {
         let nb = scale / length * index;
         nb = (Number(nb) === nb && nb % 1 === 0 ? nb : parseFloat(scale / length * index).toFixed(1));
-        render.push(m('text', {
+        render.push(m("text", {
             x: 0,
             y: index === 0 ? ((45 - index * ySize) + i * (legendSize * 9 / 10)) : ((45 - index * ySize) - ySize / 3 + i * (legendSize * 9 / 10)),
             fill: color,
-            'font-size': legendSize * 9 / 10
+            "font-size": legendSize * 9 / 10
         }, nb));
     }
 
@@ -109,7 +109,7 @@ const drawXLegends = (lines, length) => {
         lines.forEach((line, lIndex) => {
             if (line.data[index] != undefined) {
                 tmp.push({
-                    "label": line.data[index].label.length > 10 ? line.data[index].label.slice(0, 10) + '...' : line.data[index].label,
+                    "label": line.data[index].label.length > 10 ? line.data[index].label.slice(0, 10) + "..." : line.data[index].label,
                     "color": line.color
                 });
             }
@@ -117,11 +117,11 @@ const drawXLegends = (lines, length) => {
         
         tmp.forEach((value, tIndex) => {
             const x = 5 + (index * 85 / length) + tIndex * legendSize;
-            render.push(m('text', {
+            render.push(m("text", {
                 x: x,
                 y: 53,
                 fill: value.color,
-                'font-size': legendSize * 9 / 10,
+                "font-size": legendSize * 9 / 10,
                 style: `transform: rotate(-60deg); transform-origin: ${x}px 53px;`
             }, value.label));
         });
@@ -135,47 +135,47 @@ const view = (ctrl) => {
 
     const total = ctrl.grid;
 
-    return m('svg', {
-        viewBox:        '0 0 100 55',
-        xmlns:          'http://www.w3.org/2000/svg',
-        'xmlns:xlink':  'http://www.w3.org/1999/xlink'
+    return m("svg", {
+        viewBox:        "0 0 100 55",
+        xmlns:          "http://www.w3.org/2000/svg",
+        "xmlns:xlink":  "http://www.w3.org/1999/xlink"
     }, [
 
         // Draw x grid.
-        m('g', {
-            stroke:             'black',
+        m("g", {
+            stroke:             "black",
             opacity:            0.3,
-            'stroke-width':     0.3,
-            'stroke-dasharray': '1, 1'
+            "stroke-width":     0.3,
+            "stroke-dasharray": "1, 1"
         }, drawXGrids(total + 1)),
         
         // Draw grid Y.
-        m('g', {
-            stroke:             'black',
+        m("g", {
+            stroke:             "black",
             opacity:            0.3,
-            'stroke-width':     0.3,
-            'stroke-dasharray': '1, 1'
+            "stroke-width":     0.3,
+            "stroke-dasharray": "1, 1"
         }, drawYGrids(total)),
 
         // Draw grid Y legends.
-        m('g', [
+        m("g", [
             ctrl.scales.map((scale, index) => {
                 return drawYLegends(ctrl.lines, scale, ctrl.lines[index].color, total, index);
             })
         ]),
 
         // Draw Grid X legends.
-        m('g', [
+        m("g", [
             drawXLegends(ctrl.lines, total)
         ]),
 
         // Draw lines points.
-        m('g', [
+        m("g", [
             ctrl.lines.map((line, lIndex) => {
                 let scale = ctrl.scales[lIndex];
-                return m('g', [
+                return m("g", [
                     line.data.map((point, pIndex) => {
-                        return m('circle', {
+                        return m("circle", {
                            cx:      10 + (pIndex * 75 / total),
                            cy:      45 - ((point.value * total / scale) * 35 / (total + 1)),
                            r:       0.7,
@@ -187,15 +187,15 @@ const view = (ctrl) => {
         ]),
 
         // Draw straight lines.
-        m('g', {
-            'stroke-width': 0.5,
-            fill:           'none'
+        m("g", {
+            "stroke-width": 0.5,
+            fill:           "none"
         }, [
             ctrl.lines.map((line, lIndex) => {
                 let scale = ctrl.scales[lIndex];
-                return m('polyline', {
+                return m("polyline", {
                     points: line.data.map((point, pIndex) => {
-                        return 10 + (pIndex * 75 / total) + ',' + (45 - ((point.value * total / scale) * 35 / (total + 1)));
+                        return 10 + (pIndex * 75 / total) + "," + (45 - ((point.value * total / scale) * 35 / (total + 1)));
                     }),
                     stroke: line.color,
                 });
@@ -203,24 +203,24 @@ const view = (ctrl) => {
         ]),
 
         // Draw lines legends.
-        m('g', [
+        m("g", [
             ctrl.lines.map((line, index) => {
                 const fontSize = ((30 / ctrl.lines.length > 2) ? 2 : 30 / ctrl.lines.length);
-                // If the text length is above 7 characters then slice it and add '...'.
-                const cutText = line.title.length > 7 ? line.title.slice(0, 7) + '...' : line.title;
-                return m('g', [
-                    m('line', {
+                // If the text length is above 7 characters then slice it and add "...".
+                const cutText = line.title.length > 7 ? line.title.slice(0, 7) + "..." : line.title;
+                return m("g", [
+                    m("line", {
                         x1:             90,
                         y1:             12 + (index * fontSize),
                         x2:             92,
                         y2:             12 + (index * fontSize),
                         stroke:         line.color,
-                        'stroke-width': 0.5
+                        "stroke-width": 0.5
                     }),
-                    m('text', {
+                    m("text", {
                         x:      93,
                         y:      12.5 + (index * fontSize),
-                        'font-size': fontSize * 9 / 10 + 'px'
+                        "font-size": fontSize * 9 / 10 + "px"
                     }, cutText)
                 ])
             })
@@ -228,6 +228,7 @@ const view = (ctrl) => {
     ]);
 }
 
+// Export all previous functions.
 module.exports = {
     controller,
     view
