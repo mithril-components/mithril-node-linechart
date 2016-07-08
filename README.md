@@ -58,6 +58,6 @@ Test
 Setup [mithril-component-tools](https://github.com/mithril-components/mitthril-components-tools) first. Then:
 
     npm install
-    mct test pagination.js en
+    mct test .
 
 

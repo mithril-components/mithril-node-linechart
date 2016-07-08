@@ -11,7 +11,7 @@
     },
     "repository": {
         "type": "git",
-        "url": "git+https://github.com/mithril-components/mithril-node-harviewer.git"
+        "url": "git+https://github.com/mithril-components/mithril-node-linechart.git"
     },
     "keywords": [
         "mithril",
@@ -19,7 +19,7 @@
         "linechart"
     ],
     "bugs": {
-        "url": "https://github.com/mithril-components/mithril-node-harviewer/issues"
+        "url": "https://github.com/mithril-components/mithril-node-linechart/issues"
     },
-    "homepage": "https://github.com/mithril-components/mithril-node-harviewer#readme"
+    "homepage": "https://github.com/mithril-components/mithril-node-linechart#readme"
 }

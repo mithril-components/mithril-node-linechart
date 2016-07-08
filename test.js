@@ -159,15 +159,5 @@ const model = {
 const ctrl = linechart.controller(model);
 const view = linechart.view(ctrl);
 const innerHtml = render(view);
-//console.log(innerHtml);
 
-
-const base = fs.readFileSync('template.html', 'UTF-8');
-fs.writeFileSync('index.html', base.replace('%CONTENT%', innerHtml), 'UTF-8');
-
-/*
-Hide or show grid
-Hide or show lines
-Hide or show point
-Line or Sinus
-*/
+console.log(innerHtml);
